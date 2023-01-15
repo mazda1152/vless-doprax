@@ -10,11 +10,11 @@
 
 ## 部署
 
-<a href="https://replit.com/github/jimmyli1014/xray-replit">
+<a href="https://replit.com/github/jimmyli1014/vless-replit">
   <img alt="Run on Replit" src="https://replit.com/badge/github/andbruibm/reader-replit" />
 </a><br/>
 
-可参考以下项目部署部分，点击以上按钮部署，Secrets改为设置uuid和path变量。
+可参考以下项目部署部分，点击以上按钮进行部署，注意Secrets改为设置uuid和path变量。
 
 https://raw.githubusercontent.com/wy580477/replit-trojan/main/README.md
 

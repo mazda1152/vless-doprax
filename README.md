@@ -1,6 +1,6 @@
 # vless-replit
 
-在Replit上使用Xray Core部署vless+ws+tls协议（推荐使用该组合），目标在安全/稳定性和性能上均得到最优解。
+在Replit上使用Xray Core部署vless+ws+tls协议（推荐使用该组合），目标在安全/隐匿性和性能上均得到最优解。
 
 **第一次进行完整配置，可能部分配置不算完善，但可以满足日常使用，配置内容仅供参考。** 
 
@@ -16,9 +16,22 @@
   <img alt="Run on Replit" src="https://replit.com/badge/github/andbruibm/reader-replit" />
 </a><br/>
 
-可参考以下项目部署部分，点击以上按钮进行部署，注意Secrets改为设置uuid和path变量。
+可参考以下项目部署部分，点击以上按钮进行部署。注意Secrets改为设置uuid和path变量，然后打开console赋予xray和caddy执行权限（例如执行`chmod +x caddy xray`）。
 
 https://raw.githubusercontent.com/wy580477/replit-trojan/main/README.md
+
+```
+客户端参考配置：
+域名：{项目名}.{账户名}.repl.co（例：vless.xray.repl.co，其中账户名为xray，项目名为vless）
+端口：443
+流控：留空（必须为空，其他选项均是xtls的）
+加密方式：none（一定是none，是为提醒vless本身没有加密，所以依赖tls）
+传输协议：ws
+伪装类型：none
+路径：{Secrets中设定的path}?ed=2048（例：/example?ed=2048，在常规path中添加ed参数实现0-RTT，具体可参考https://github.com/XTLS/Xray-core/pull/375）
+TLS: tls（在Replit中不能使用xtls，且xtls似乎有更明显的特征，在讨论中看到更多更容易被GFW发现；tls更贴近真实https流量，更为推荐）
+uTLS(Fingerprint)：建议不留空（用以解决GFW利用tls握手时ClientHello指纹中固定的特征进行判断，更贴近正常浏览器的请求，提高隐匿性）
+```
 
 ## 说明
 

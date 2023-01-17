@@ -102,5 +102,5 @@ EOF
 
 # run
 chmod +x caddy xray
-./caddy run --config /tmp/caddy.json &
-./xray -c /tmp/xray.json
+./xray -c /tmp/xray.json &
+./caddy run --config /tmp/caddy.json

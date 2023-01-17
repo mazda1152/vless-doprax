@@ -1,14 +1,18 @@
 # vless-replit
 
-在Replit上使用Xray Core部署vless+ws+tls协议（推荐使用该组合），目标在安全/隐匿性和性能上均得到最优解。
+在Replit上使用Xray Core部署vless+ws+tls协议（推荐使用该组合）
 
-**第一次进行完整配置，可能部分配置不算完善，但可以满足日常使用，配置内容仅供参考。** 
+**可能部分配置不算完善，但足以满足日常使用，配置内容仅供参考。**
 
 ## 注意
 
-**切勿滥用！账号封禁风险自负！网络流量每月有100GB软上限。**
+- **切勿滥用！账号封禁风险自负！网络流量每月有100GB软上限。**
 
-可用的免费资源越来越少了，基本都被薅没（可怜的Heroku），尽量小流量自用，用来满足日常需求就好。
+  可用的免费资源越来越少，基本都被薅没了（可怜的Arukas和Heroku），尽量小流量自用，用来满足日常需求就好。
+
+- **Free Plan的Repls只能设为Public，即任何人都能查看Repls下的文件，注意不要泄漏设定的path和uuid！**
+
+- **尽量避免使用任何代理访问国内网站。在本配置中为满足一定的需求，没有直接block国内域名和ip，请注意理应在客户端中进行路由配置，绕过国内网站。**
 
 ## 部署
 
@@ -16,7 +20,9 @@
   <img alt="Run on Replit" src="https://replit.com/badge/github/andbruibm/reader-replit" />
 </a><br/>
 
-可参考以下项目部署部分，点击以上按钮进行部署。注意Secrets改为设置uuid和path变量，然后打开console赋予xray和caddy执行权限（例如执行`chmod +x caddy xray`）。
+可参考以下项目部署部分，点击以上按钮进行部署。注意Secrets改为设置uuid和path变量。
+
+可以使用CDN（例如Cloudflare），避免直连，可一定程度提高安全性。（对于Replit使用Google Cloud，其本身直连速度大部分情况可以满足，所以使用CDN可能不会加速，甚至会出现减速的情况，但还是推荐使用。）
 
 https://raw.githubusercontent.com/wy580477/replit-trojan/main/README.md
 
@@ -28,7 +34,7 @@ https://raw.githubusercontent.com/wy580477/replit-trojan/main/README.md
 加密方式：none（一定是none，是为提醒vless本身没有加密，所以依赖tls）
 传输协议：ws
 伪装类型：none
-路径：{Secrets中设定的path}?ed=2048（例：/example?ed=2048，在常规path中添加ed参数实现0-RTT，具体可参考https://github.com/XTLS/Xray-core/pull/375）
+路径：{Secrets中设定的path}?ed=2048（例：/example?ed=2048，在原有path后添加ed参数实现WebSocket 0-RTT，具体可参考https://github.com/XTLS/Xray-core/pull/375）
 TLS: tls（在Replit中不能使用xtls，且xtls似乎有更明显的特征，在讨论中看到更多更容易被GFW发现；tls更贴近真实https流量，更为推荐）
 uTLS(Fingerprint)：建议不留空（用以解决GFW利用tls握手时ClientHello指纹中固定的特征进行判断，更贴近正常浏览器的请求，提高隐匿性）
 ```

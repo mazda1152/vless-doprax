@@ -1,4 +1,4 @@
-# write configure file
+# config
 cat > /tmp/caddy.json << EOF
 {
   "admin": {
@@ -40,31 +40,36 @@ EOF
 
 cat > /tmp/xray.json << EOF
 {
-  "log": {
-    "loglevel": "warning"
-  },
-  "inbounds": [
-    {
-      "port": 12345,
-      "protocol": "vless",
-      "settings": {
+	"log": {
+		"loglevel": "warning"
+	},
+	"inbounds": [
+		{
+			"port": 12345,
+			"protocol": "vless",
+			"settings": {
         "udp": false,
-        "clients": [{
-          "id": "${uuid}"
-        }],
-        "decryption": "none"
-      },
-      "streamSettings": {
-        "network": "ws",
+				"clients": [{
+					"id": "${uuid}"
+				}],
+				"decryption": "none"
+			},
+			"streamSettings": {
+				"network": "ws",
         "wsSettings": {
           "path": "${path}"
         }
-      }
-    }
-  ],
+			}
+		}
+	],
   "outbounds": [
     {
-      "protocol": "freedom"
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
     },
     {
       "protocol": "dns",
@@ -78,12 +83,24 @@ cat > /tmp/xray.json << EOF
         "outboundTag": "dns_out",
         "network": "udp",
         "port": 53
+      },
+      {
+        "type": "field",
+        "outboundTag": "block",
+        "ip": ["geoip:private"]
       }
+    ]
+  },
+  "dns": {
+    "servers": [
+      "https+local://1.1.1.1/dns-query",
+      "localhost"
     ]
   }
 }
 EOF
 
 # run
-./xray -c /tmp/xray.json &
-./caddy run --config /tmp/caddy.json
+chmod +x caddy xray
+./caddy run --config /tmp/caddy.json &
+./xray -c /tmp/xray.json

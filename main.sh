@@ -1,4 +1,6 @@
-# config
+#!/bin/bash
+
+# temp config files
 cat > /tmp/caddy.json << EOF
 {
   "admin": {
@@ -11,7 +13,7 @@ cat > /tmp/caddy.json << EOF
     "http": {
       "servers": {
         "xray": {
-          "listen": [":80",":443"],
+          "listen": [":10000"],
           "routes": [
             {
               "match": [{
@@ -20,7 +22,7 @@ cat > /tmp/caddy.json << EOF
               "handle": [{
                 "handler": "reverse_proxy",
                 "upstreams": [{
-                  "dial": "localhost:12345"
+                  "dial": "localhost:20000"
                 }]
               }]
             },
@@ -45,7 +47,7 @@ cat > /tmp/xray.json << EOF
 	},
 	"inbounds": [
 		{
-			"port": 12345,
+			"port": 20000,
 			"protocol": "vless",
 			"settings": {
         "udp": false,
@@ -103,4 +105,6 @@ EOF
 # run
 chmod +x caddy xray
 ./xray -c /tmp/xray.json &
-./caddy run --config /tmp/caddy.json
+# wait for xray to be started
+(until (netstat -l | grep 20000); do usleep 100; done &&
+./caddy run --config /tmp/caddy.json)

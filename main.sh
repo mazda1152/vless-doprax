@@ -43,7 +43,8 @@ EOF
 cat > /tmp/xray.json << EOF
 {
 	"log": {
-		"loglevel": "warning"
+		"loglevel": "warning",
+    "access": "/dev/null"
 	},
 	"inbounds": [
 		{
@@ -102,9 +103,16 @@ cat > /tmp/xray.json << EOF
 }
 EOF
 
-# run
+# give permissions
 chmod +x caddy xray
+# start xray
 ./xray -c /tmp/xray.json &
 # wait for xray to be started
-(until (netstat -l | grep 20000); do usleep 100; done &&
-./caddy run --config /tmp/caddy.json)
+(until (netstat -l | grep 20000 > /dev/null); do usleep 100; done &&
+# start caddy
+./caddy run --config /tmp/caddy.json) &
+# stay the repl awake
+(while true;
+  do sleep 1m;
+  curl https://${REPL_SLUG}.${REPL_OWNER}.repl.co > /dev/null 2>&1;
+done)

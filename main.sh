@@ -42,29 +42,29 @@ EOF
 
 cat > /tmp/xray.json << EOF
 {
-	"log": {
-		"loglevel": "warning",
+  "log": {
+    "loglevel": "warning",
     "access": "/dev/null"
-	},
-	"inbounds": [
-		{
-			"port": 20000,
-			"protocol": "vless",
-			"settings": {
+  },
+  "inbounds": [
+    {
+      "port": 20000,
+      "protocol": "vless",
+      "settings": {
         "udp": false,
-				"clients": [{
-					"id": "${uuid}"
-				}],
-				"decryption": "none"
-			},
-			"streamSettings": {
-				"network": "ws",
+        "clients": [{
+          "id": "${uuid}"
+        }],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
         "wsSettings": {
           "path": "${path}"
         }
-			}
-		}
-	],
+      }
+    }
+  ],
   "outbounds": [
     {
       "protocol": "freedom",

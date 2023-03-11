@@ -27,6 +27,15 @@ cat > /tmp/caddy.json << EOF
               }]
             },
             {
+              "match": [{
+                "path": ["/host"]
+              }],
+              "handle": [{
+                "handler": "static_response",
+                "body": "${REPL_SLUG}.${REPL_OWNER}.repl.co"
+              }]
+            },
+            {
               "handle": [{
                 "handler": "static_response",
                 "body": "Hello world!"
